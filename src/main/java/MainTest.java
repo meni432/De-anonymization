@@ -54,7 +54,7 @@ public class MainTest {
     }
 
     public static void main(String[] args) {
-//        definitionCheck();
+        definitionCheck();
         MainTest mainTest = new MainTest();
         mainTest.runTest();
     }
