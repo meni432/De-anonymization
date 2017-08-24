@@ -11,7 +11,7 @@ import java.util.Map;
 /**
  */
 
-public class IntegrationIndexes implements IntegrationIndexesInterface {
+public class IntegrationIndexes {
     public static final int COMMON_INDEX_NOT_FOUND = -1;
     public static final int NETFLIX_INDEX_ARR_POSITION = 0;
     public static final int IMDB_INDEX_ARR_POSITION = 1;
@@ -99,10 +99,5 @@ public class IntegrationIndexes implements IntegrationIndexesInterface {
             e.printStackTrace();
         }
         return targetMap;
-    }
-
-    @Override
-    public long getCommonIndex(long index) {
-        throw new RuntimeException("getCommonIndex don't defined");
     }
 }
