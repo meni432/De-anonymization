@@ -13,6 +13,11 @@ public class Dataset {
     private IntegrationIndexesInterface integrationIndexes;
     private long maxUserIndex = 0;
 
+    /**
+     * Data structure for Netflix Format Data Set
+     * @param datasetFiles array of training files
+     * @param integrationIndexes integration index between Datasets indexes to common index
+     */
     public Dataset(File[] datasetFiles, IntegrationIndexesInterface integrationIndexes) {
         userToMovies = new HashMap<>();
         usersIdsList = new LinkedList<>();
@@ -54,6 +59,11 @@ public class Dataset {
         }
     }
 
+    /**
+     * Get common index of movie list of given user id (user index)
+     * @param userId
+     * @return
+     */
     public List<UserRank> getUserMovieList(long userId) {
         if (userToMovies.containsKey(userId)) {
             return userToMovies.get(userId);
@@ -61,14 +71,23 @@ public class Dataset {
         return null;
     }
 
+    /**
+     * @return total user read from files
+     */
     public long getTotalUsers() {
         return usersIdsList.size();
     }
 
+    /**
+     * @return all users in a list
+     */
     public List<Long> getUsersIdsList() {
         return usersIdsList;
     }
 
+    /**
+     * @return max user idndex
+     */
     public long getMaxUserIndex() {
         return maxUserIndex;
     }

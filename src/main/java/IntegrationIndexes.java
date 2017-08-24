@@ -23,6 +23,12 @@ public class IntegrationIndexes {
     private Map<Long, Long> netflixIndexToCommonIndex;
     private Map<Long, Long[]> commonIndexToBaseIndex;
 
+    /**
+     * currently work only for 2 different dataset
+     * conceptually can work with any number of different dataset
+     * @param imdbMovieTitle
+     * @param netflixMovieTitle
+     */
     public IntegrationIndexes(File imdbMovieTitle, File netflixMovieTitle) {
         imdbIndexToCommonIndex = new HashMap<>();
         netflixIndexToCommonIndex = new HashMap<>();

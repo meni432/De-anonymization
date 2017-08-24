@@ -1,5 +1,5 @@
 /**
- * Created by meni on 24/08/17.
+ *
  */
 public class UserRank {
     long commonIndex;
