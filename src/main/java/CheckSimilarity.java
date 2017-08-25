@@ -6,7 +6,7 @@ import java.util.*;
 
 public class CheckSimilarity {
     public static final int MIN_MOVIES_THRESHOLDS = 30;
-    private static final double[] RANKINGS_OFFSET_FACTOR = {0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1};
+    private static final double[] RANKINGS_OFFSET_FACTOR = {0.1, 0.5};
 
     private Dataset imdbDataset;
     private Dataset netflixDataset;
