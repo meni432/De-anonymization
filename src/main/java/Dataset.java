@@ -28,35 +28,40 @@ public class Dataset {
     }
 
     private void readFiles() {
+        MyLogger.info("start read files");
+        int _sec_num = 0;
         for (File file : datasetFiles) {
             long userIndex;
             try (BufferedReader br = new BufferedReader(new FileReader(file))) {
                 String line;
                 if ((line = br.readLine()) != null) {
                     String[] column = line.split(":");
-                    userIndex = Long.parseLong(column[0]);
-                    if (userIndex > maxUserIndex) {
-                        maxUserIndex = userIndex;
-                    }
-                    usersIdsList.add(userIndex);
-                    List<UserRank> userMovieList = getOrCreateMovieList(userToMovies, userIndex);
+                    int movieRank = Integer.valueOf(column[0]);
+                    long movieCommonId = integrationIndexes.getCommonIndex(movieRank);
                     while ((line = br.readLine()) != null) {
                         column = line.split(",");
-                        long movieCommonId = integrationIndexes.getCommonIndex(Long.valueOf(column[0]));
+                        userIndex = Long.parseLong(column[0]);
+                        if (userIndex > maxUserIndex) {
+                            maxUserIndex = userIndex;
+                        }
+                        usersIdsList.add(userIndex);
+                        List<UserRank> userMovieList = getOrCreateMovieList(userToMovies, userIndex);
                         if (movieCommonId != IntegrationIndexes.COMMON_INDEX_NOT_FOUND) {
-                            int movieRank = Integer.valueOf(column[1]);
                             userMovieList.add(new UserRank(movieCommonId, movieRank));
-                            usersMovieOrigIdsList.add(Long.valueOf(column[0]));
                         }
                     }
                 }
-
             } catch (FileNotFoundException e) {
                 e.printStackTrace();
             } catch (IOException e) {
                 e.printStackTrace();
             }
+
+            if (_sec_num++ % 100 == 0) {
+                MyLogger.info("end read file " + _sec_num);
+            }
         }
+        MyLogger.info("end reading files");
     }
 
     /**
