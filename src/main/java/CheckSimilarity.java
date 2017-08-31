@@ -32,33 +32,38 @@ public class CheckSimilarity {
             MyLogger.info("current factor: " + currentFactorValue);
             for (Long imdbUserIndex : this.imdbDataset.getUsersIdsList()) {
                 for (Long netflixUserIndex : this.netflixDataset.getUsersIdsList()) {
-                    double currentMatch = 0;
-                    List<UserRank> imdbUserMovieList = this.imdbDataset.getUserMovieList(imdbUserIndex);
-                    if (imdbUserMovieList.size() > MIN_MOVIES_THRESHOLDS) {
-                        for (UserRank imdbUserMovieId : imdbUserMovieList) {
-                            List<UserRank> netflixUserMovieList = this.netflixDataset.getUserMovieList(netflixUserIndex);
-                            if (netflixUserMovieList.size() > MIN_MOVIES_THRESHOLDS) {
-                                for (UserRank netflixUserMovieId : netflixUserMovieList) {
-                                    if (imdbUserMovieId.getCommonIndex() == netflixUserMovieId.getCommonIndex()) {
-                                        currentMatch = currentMatch + 1 - (currentFactorValue * Math.abs(imdbUserMovieId.getRank() - netflixUserMovieId.getRank()));
-                                    }
-                                }
-                            }
-                        }
-                        if (currentMatch > maxMatch) {
-                            maxMatch = currentMatch;
-                            maxNetflixId = netflixUserIndex;
-                            maxImdbId = imdbUserIndex;
-                        }
+                    double currentMatch = getCurrentMatch(currentFactorValue, imdbUserIndex, netflixUserIndex);
+                    if (currentMatch > maxMatch) {
+                        maxMatch = currentMatch;
+                        maxNetflixId = netflixUserIndex;
+                        maxImdbId = imdbUserIndex;
                     }
                 }
-                if (++iterCounting % 100 == 0) {
-                    MyLogger.info("current iter : " + (iterCounting - 1) + " maxMatch: " + maxMatch + " netflix Id : " + maxNetflixId + " imdb Id: " + maxImdbId);
+                if (iterCounting++ % 100 == 0) {
+                    MyLogger.info("current iter : " + (iterCounting) + " maxMatch: " + maxMatch + " netflix Id : " + maxNetflixId + " imdb Id: " + maxImdbId);
                 }
             }
 
             MyLogger.info("summery for Factor: " + currentFactorValue + " maxMatch: " + maxMatch + " netflix Id : " + maxNetflixId + " imdb Id: " + maxImdbId);
         }
+    }
+
+    private double getCurrentMatch(double currentFactorValue, Long imdbUserIndex, Long netflixUserIndex) {
+        double currentMatch = 0;
+        List<UserRank> imdbUserMovieList = this.imdbDataset.getUserMovieList(imdbUserIndex);
+        if (imdbUserMovieList.size() > MIN_MOVIES_THRESHOLDS) {
+            for (UserRank imdbUserMovieId : imdbUserMovieList) {
+                List<UserRank> netflixUserMovieList = this.netflixDataset.getUserMovieList(netflixUserIndex);
+                if (netflixUserMovieList.size() > MIN_MOVIES_THRESHOLDS) {
+                    for (UserRank netflixUserMovieId : netflixUserMovieList) {
+                        if (imdbUserMovieId.getCommonIndex() == netflixUserMovieId.getCommonIndex()) {
+                            currentMatch = currentMatch + 1 - (currentFactorValue * Math.abs(imdbUserMovieId.getRank() - netflixUserMovieId.getRank()));
+                        }
+                    }
+                }
+            }
+        }
+        return currentMatch;
     }
 
     private static List<Long> getOrCreateMovieList(Map<Long, List<Long>> listMap, long userId) {
